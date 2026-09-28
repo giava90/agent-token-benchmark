@@ -1,5 +1,36 @@
 # Next experiments
 
+> **Phase 2 completed 2026-09-28.** Batch probe, multi-item grouping, error
+> analysis and the full-scale cost model are all done — see `PHASE2` below for
+> what they settled and what changed as a result. Items 2.1, 2.2 and 3.2 in the
+> original backlog are now answered.
+
+## PHASE 2 RESULTS
+
+| Experiment | Cost | Outcome |
+|---|---|---|
+| Batch API probe | $0.21 | **Batch is a loss here.** 2 of 10 requests read the cache, 8 wrote it at the 1h premium. $0.0207/item vs $0.00325 live cached — 6x worse, not half. |
+| Multi-item grouping | $0.49 | **70–76% cheaper at identical accuracy.** Haiku 81.7% both ways, Opus-low 93.3% both ways, McNemar p=1.000 on both. Biggest lever found. |
+| Error analysis | free | Only 1/117 items failed by all five; Jaccard overlap 0.10–0.40. Majority voting loses to the best single arm. Failed positives are disproportionately multi-citation claims — a benchmark limitation, not evidence about the review. |
+| Full-scale model | free | All 608 claims + full bibliography = 184k tokens, **fits in one context**. Chunking saves 59% but the saving is context *scoping*, not delegation; an orchestrator on top adds $0.11 and buys nothing. |
+| Agent slice test | plan usage | **Void.** Agent scored 24/24 by detecting that labels alternated with item index. Benchmark flaw, now fixed. |
+
+### The benchmark flaw, and what it cost
+
+`make_positive = (i % 2 == 0)` made every label predictable from position — all
+117 items alternated. Single-call runs could not exploit it (one item per
+request); grouped runs scored 81.7%/93.3%, matching one-at-a-time, so they did
+not either. **The published cost and accuracy findings stand.** The agent result
+does not. Labels now come from a seeded shuffle (52% alternation); the original
+construction is kept as `data/pairs_v1_alternating.jsonl` for provenance.
+
+**Required before any further quality comparison:** re-run the benchmark on the
+corrected pairs. Cost and caching results do not depend on label ordering and
+need no re-run.
+
+---
+
+
 Backlog after the first paid run (2026-09-28, $8.66, five configurations over
 117 claims). Results in `data/results.json`; analysis in `scripts/08_analyse.py`.
 
