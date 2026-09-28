@@ -59,11 +59,24 @@ def build_pairs(
     pairs: list[Pair] = []
 
     ordered = sorted(claims, key=lambda c: c["claim_id"])
+
+    # Assign labels by a seeded shuffle, NOT by alternating position.
+    #
+    # The first version of this used `i % 2 == 0`, which made the label
+    # perfectly predictable from the item's position. Single-call runs could
+    # not exploit that - each request sees one item - but anything that sees
+    # several consecutive items at once can score 100% without reading them,
+    # and a Claude Code agent handed a 24-item slice duly did. Balanced but
+    # unpredictable is the requirement; balanced and ordered is not enough.
+    n_pos = len(ordered) // 2 + len(ordered) % 2
+    labels = [True] * n_pos + [False] * (len(ordered) - n_pos)
+    rng.shuffle(labels)
+
     for i, c in enumerate(ordered):
         gold = set(c["gold_keys"])
         bucket = c.get("subsubsection") or c.get("subsection") or c.get("section") or ""
 
-        make_positive = (i % 2 == 0)
+        make_positive = labels[i]
         if make_positive:
             candidate = rng.choice(sorted(gold))
             label, difficulty = "supported", "positive"
