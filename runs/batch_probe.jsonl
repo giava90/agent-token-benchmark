@@ -1,0 +1,10 @@
+{"custom_id": "meas-0008-p", "input_tokens": 54, "output_tokens": 76, "cache_creation_input_tokens": 25263, "cache_read_input_tokens": 0, "cost_usd": 0.02548}
+{"custom_id": "meas-0005-p", "input_tokens": 81, "output_tokens": 65, "cache_creation_input_tokens": 25263, "cache_read_input_tokens": 0, "cost_usd": 0.025466}
+{"custom_id": "meas-0002-p", "input_tokens": 78, "output_tokens": 48, "cache_creation_input_tokens": 25263, "cache_read_input_tokens": 0, "cost_usd": 0.025422}
+{"custom_id": "meas-0009-p", "input_tokens": 58, "output_tokens": 62, "cache_creation_input_tokens": 25263, "cache_read_input_tokens": 0, "cost_usd": 0.025447}
+{"custom_id": "meas-0006-p", "input_tokens": 72, "output_tokens": 111, "cache_creation_input_tokens": 25263, "cache_read_input_tokens": 0, "cost_usd": 0.0255765}
+{"custom_id": "meas-0004-p", "input_tokens": 67, "output_tokens": 78, "cache_creation_input_tokens": 25263, "cache_read_input_tokens": 0, "cost_usd": 0.0254915}
+{"custom_id": "meas-0003-p", "input_tokens": 59, "output_tokens": 55, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 25263, "cost_usd": 0.00143015}
+{"custom_id": "meas-0001-p", "input_tokens": 78, "output_tokens": 101, "cache_creation_input_tokens": 25263, "cache_read_input_tokens": 0, "cost_usd": 0.0255545}
+{"custom_id": "meas-0007-p", "input_tokens": 51, "output_tokens": 89, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 25263, "cost_usd": 0.0015111500000000002}
+{"custom_id": "meas-0010-p", "input_tokens": 63, "output_tokens": 61, "cache_creation_input_tokens": 25263, "cache_read_input_tokens": 0, "cost_usd": 0.025447}

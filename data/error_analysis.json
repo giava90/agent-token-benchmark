@@ -1,0 +1,131 @@
+{
+  "n_arms": 5,
+  "arms": [
+    "opus-low",
+    "opus-default",
+    "sonnet-default",
+    "haiku",
+    "sonnet-low"
+  ],
+  "failure_agreement": {
+    "0": 50,
+    "1": 42,
+    "2": 16,
+    "3": 2,
+    "4": 6,
+    "5": 1
+  },
+  "universally_failed": 9,
+  "flagged": {
+    "weak_citation": [
+      {
+        "pair_id": "meas-0055-p",
+        "claim": "Signed extensions preserve the positive and negative degree sequences: in expectation for the signed Chung--Lu model [CITATION], and exactly for the microcanonical signed configuration model [CITATION]",
+        "label": "supported",
+        "difficulty": "positive",
+        "candidate_key": "saiz2017evidence",
+        "candidate_title": "Evidence of structural balance in spatial ecological networks",
+        "gold_keys": [
+          "derr2018_chungLuSB",
+          "gallo2024testing",
+          "saiz2017evidence"
+        ]
+      },
+      {
+        "pair_id": "meas-0065-p",
+        "claim": "Under signed-shuffling null models that impose a common positive-link ratio on every node (see [CITATION] or the SGRM-FT) the verdict reverses, and the $---$ triad becomes over-represented.",
+        "label": "supported",
+        "difficulty": "positive",
+        "candidate_key": "szell_2010",
+        "candidate_title": "Multirelational organization of large-scale social networks in an online world",
+        "gold_keys": [
+          "szell_2010"
+        ]
+      },
+      {
+        "pair_id": "meas-0071-p",
+        "claim": "Note that neither approach relies on a sampled null ensemble: [CITATION] infer the block structure by minimising a Bayesian information criterion and [CITATION] obtain the confidence interval in closed form.",
+        "label": "supported",
+        "difficulty": "positive",
+        "candidate_key": "Gallo2024",
+        "candidate_title": "Assessing frustration in real-world signed networks: A statistical theory of balance",
+        "gold_keys": [
+          "Gallo2024",
+          "chen2026nonparametric"
+        ]
+      },
+      {
+        "pair_id": "meas-0081-p",
+        "claim": "Ordinary logistic regressions that treat dyads or triads as independent observations, rather than modeling network dependence, have been used in the same spirit to test triadic hypotheses in survey data [CITATION].",
+        "label": "supported",
+        "difficulty": "positive",
+        "candidate_key": "Kalmijn2003",
+        "candidate_title": "Shared friendship networks and the life course: An analysis of survey data on married and cohabiting couples",
+        "gold_keys": [
+          "Kalmijn2003",
+          "Chiang2019",
+          "Koster2018"
+        ]
+      },
+      {
+        "pair_id": "meas-0091-p",
+        "claim": "While multi-edge configuration models are often used due to their simplicity and node-preserving properties, other alternatives such as stochastic block models (SBMs) can be employed [CITATION].",
+        "label": "supported",
+        "difficulty": "positive",
+        "candidate_key": "Andres2023",
+        "candidate_title": "Reconstructing signed relations from interaction data",
+        "gold_keys": [
+          "Andres2023"
+        ]
+      },
+      {
+        "pair_id": "meas-0101-p",
+        "claim": "In international relations the evidence is period- and definition-dependent, and balance among blocs need not imply convergence to a single global configuration [CITATION].",
+        "label": "supported",
+        "difficulty": "positive",
+        "candidate_key": "Aref_2018",
+        "candidate_title": "Balance and frustration in signed networks",
+        "gold_keys": [
+          "doreian",
+          "Aref_2018"
+        ]
+      }
+    ],
+    "defensible_alternative": [
+      {
+        "pair_id": "meas-0010-p",
+        "claim": "Generalizations of such cycle-based measures therefore consider closed walks, where backtracking along the same nodes is possible [CITATION].",
+        "label": "not_supported",
+        "difficulty": "hard",
+        "candidate_key": "diazdiaz_mathematical_2024",
+        "candidate_title": "Mathematical modeling of local balance in signed networks and its applications to global international analysis",
+        "gold_keys": [
+          "pelino2012class"
+        ]
+      },
+      {
+        "pair_id": "meas-0040-p",
+        "claim": "Additionally, [CITATION] derive a measure for weak balance of the form:",
+        "label": "not_supported",
+        "difficulty": "hard",
+        "candidate_key": "Doreian1996",
+        "candidate_title": "A partitioning approach to structural balance",
+        "gold_keys": [
+          "talaga_polarization_2023"
+        ]
+      },
+      {
+        "pair_id": "meas-0042-p",
+        "claim": "Following [CITATION] and extended by [CITATION], the generalized frustration can be written as",
+        "label": "not_supported",
+        "difficulty": "hard",
+        "candidate_key": "Gallo2024",
+        "candidate_title": "Assessing frustration in real-world signed networks: A statistical theory of balance",
+        "gold_keys": [
+          "Doreian1996",
+          "anchuri2012spectralSB"
+        ]
+      }
+    ]
+  }
+}

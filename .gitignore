@@ -1,11 +1,16 @@
 # Secrets
 .env
 
-# Generated corpus and run logs, except the published results
+# Generated corpus and run logs, except published results
 data/*
 !data/results.json
+!data/error_analysis.json
+!data/token_counts.json
 runs/*
 !runs/full_run.jsonl
+!runs/batch_probe.jsonl
+!runs/multi_item_claude-haiku-4-5_k10.jsonl
+!runs/multi_item_claude-opus-5_k10.jsonl
 
 # Python
 __pycache__/

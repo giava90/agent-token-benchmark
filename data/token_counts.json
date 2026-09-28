@@ -1,0 +1,60 @@
+{
+  "n_items": 117,
+  "assumed_output_tokens": 120,
+  "include_abstracts": true,
+  "counts": {
+    "claude-opus-5": {
+      "prefix_tokens": 37276,
+      "mean_tail_tokens": 102.86666666666666,
+      "min_tail": 80,
+      "max_tail": 146,
+      "min_cacheable_prefix": 512,
+      "caches": true,
+      "count_calls": 16
+    },
+    "claude-sonnet-5": {
+      "prefix_tokens": 37276,
+      "mean_tail_tokens": 102.86666666666666,
+      "min_tail": 80,
+      "max_tail": 146,
+      "min_cacheable_prefix": 1024,
+      "caches": true,
+      "count_calls": 16
+    },
+    "claude-haiku-4-5": {
+      "prefix_tokens": 25269,
+      "mean_tail_tokens": 72.33333333333333,
+      "min_tail": 52,
+      "max_tail": 113,
+      "min_cacheable_prefix": 4096,
+      "caches": true,
+      "count_calls": 16
+    }
+  },
+  "predicted_cost_usd": [
+    {
+      "model": "claude-opus-5",
+      "uncached (derived)": 22.217635,
+      "cached 5m": 2.806158,
+      "cached + 1 idle reload": 3.039133,
+      "cached 1h + batch": 1.4729715,
+      "cache ratio": 7.917456893018854
+    },
+    {
+      "model": "claude-sonnet-5",
+      "uncached (derived)": 8.887054,
+      "cached 5m": 1.1224632,
+      "cached + 1 idle reload": 1.2156532000000002,
+      "cached 1h + batch": 0.5891886000000001,
+      "cache ratio": 7.917456893018852
+    },
+    {
+      "model": "claude-haiku-4-5",
+      "uncached (derived)": 3.035136,
+      "cached 5m": 0.40336965,
+      "cached + 1 idle reload": 0.4349559,
+      "cached 1h + batch": 0.2111607,
+      "cache ratio": 7.5244530668085705
+    }
+  ]
+}
