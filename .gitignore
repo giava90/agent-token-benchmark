@@ -1,0 +1,10 @@
+# Secrets
+.env
+
+# Generated corpus and run logs
+data/
+runs/
+
+# Python
+__pycache__/
+*.py[cod]
