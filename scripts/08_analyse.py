@@ -91,6 +91,48 @@ def main() -> int:
         comparisons.append({"a": a, "b": b, "a_only": b_only, "b_only": c_only,
                             "p": p, "significant": p < 0.05})
 
+    # ---- multiple comparisons ---------------------------------------------
+    # Six paired tests on one dataset. Holm-Bonferroni controls the family-wise
+    # error rate without assuming independence.
+    print("\nHolm-Bonferroni correction across the 6 comparisons")
+    ordered = sorted(comparisons, key=lambda c: c["p"])
+    m = len(ordered)
+    prev = 0.0
+    for i, c in enumerate(ordered):
+        adj = min(1.0, max(prev, (m - i) * c["p"]))
+        prev = adj
+        c["p_holm"] = adj
+        c["survives_correction"] = adj < 0.05
+        print(f"  {c['a'] + ' vs ' + c['b']:34} p={c['p']:.4f} -> p_holm={adj:.4f}  "
+              f"{'survives' if adj < 0.05 else 'DOES NOT survive'}")
+
+    # ---- error types -------------------------------------------------------
+    # Accepting a bad citation and rejecting a good one are not equally costly
+    # for a citation checker. Report them separately rather than folding both
+    # into one accuracy figure.
+    print(f"\n{'configuration':16} {'false accepts':>14} {'false rejects':>14} {'FA rate':>9} {'FR rate':>9}")
+    for a in arms:
+        rs = list(by_arm[a].values())
+        neg = [r for r in rs if r["truth"] == "not_supported"]
+        pos = [r for r in rs if r["truth"] == "supported"]
+        fa = sum(1 for r in neg if not r["correct"])   # bad citation waved through
+        fr = sum(1 for r in pos if not r["correct"])   # good citation rejected
+        results[a].update({
+            "false_accepts": fa, "false_rejects": fr,
+            "false_accept_rate": fa / len(neg), "false_reject_rate": fr / len(pos),
+        })
+        print(f"{a:16} {fa:14} {fr:14} {fa/len(neg):9.3f} {pos and fr/len(pos):9.3f}")
+
+    print("\ncost per bad citation caught (false accepts weighted 5x false rejects)")
+    for a in sorted(arms, key=lambda x: results[x]["cost_usd"] /
+                    max(1, results[x]["n"] - 5 * results[x]["false_accepts"] - results[x]["false_rejects"])):
+        r = results[a]
+        weighted_right = r["n"] - 5 * r["false_accepts"] - r["false_rejects"]
+        r["weighted_score"] = weighted_right / r["n"]
+        r["usd_per_weighted"] = r["cost_usd"] / weighted_right if weighted_right > 0 else None
+        val = f"${r['usd_per_weighted']:.4f}" if r["usd_per_weighted"] else "no net value"
+        print(f"  {a:16} weighted score {weighted_right:6.0f}/{r['n']}  {val}")
+
     # ---- where the money went ---------------------------------------------
     print(f"\n{'configuration':16} {'cache read':>11} {'input':>8} {'thinking':>9} {'answer':>8}")
     for a in arms:
