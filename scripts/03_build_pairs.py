@@ -18,7 +18,10 @@ def main() -> int:
     args = ap.parse_args()
 
     claims = corpus.read_jsonl(os.path.join(DATA, "claims.jsonl"))
-    refs = corpus.read_jsonl(os.path.join(DATA, "refs_all.jsonl"))
+    # Draw negatives ONLY from the bibliography the model is shown. Using the
+    # full 393-entry file here makes unresolvable keys a perfect tell for
+    # "not supported" - see the docstring in negatives.build_pairs.
+    refs = corpus.read_jsonl(os.path.join(DATA, "refs_section.jsonl"))
     all_keys = [r["key"] for r in refs]
 
     pairs = negatives.build_pairs(claims, all_keys, seed=args.seed,

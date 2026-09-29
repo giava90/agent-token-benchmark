@@ -48,10 +48,16 @@ def build_pairs(
     seed: int = 20260928,
     hard_fraction: float = 0.5,
 ) -> list[Pair]:
-    """One pair per claim, alternating positive and negative.
+    """One pair per claim: half positives, half negatives.
 
-    Half the claims yield a positive (a real gold key), half a negative. Among
-    negatives, `hard_fraction` are drawn from the same subsection.
+    `all_keys` must be the keys of the bibliography the model will actually be
+    shown - nothing else. Drawing a negative from outside it produces an item
+    whose candidate cannot be looked up, and since only negatives are ever drawn
+    that way, "key not found" becomes a perfect predictor of "not supported".
+    That leaked 20 of 117 items in the first run, all of them easy negatives,
+    and inflated exactly the tier used to argue about over-reasoning.
+
+    The unanswerable item is not the problem; the correlation with the label is.
     """
     rng = random.Random(seed)
     pool = _subsection_pool(claims)
