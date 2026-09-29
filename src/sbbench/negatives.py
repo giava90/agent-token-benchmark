@@ -64,7 +64,10 @@ def build_pairs(
     universe = sorted(all_keys)
     pairs: list[Pair] = []
 
-    ordered = sorted(claims, key=lambda c: c["claim_id"])
+    # Document order, not id order: ids are content hashes now, so sorting
+    # by them would scramble the corpus and make the seeded shuffle depend
+    # on hash values rather than on the review.
+    ordered = sorted(claims, key=lambda c: (c.get("seq", 0), c["claim_id"]))
 
     # Assign labels by a seeded shuffle, NOT by alternating position.
     #

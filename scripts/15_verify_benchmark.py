@@ -8,13 +8,17 @@ Every check here exists because its absence cost us a result:
   2. Every candidate key resolvable in the bibliography on display. Drawing
      negatives from outside it made "key not found" a perfect predictor of the
      label - 20 of 117 items, all negatives.
-  3. Labels not predictable from position. `i % 2 == 0` is balanced and readable
+  3. Claim ids derived from content, not from position. A positional counter
+     renumbers whenever the filter changes, so the same id names a different
+     sentence in each version and any join across versions is silently wrong.
+  4. Labels not predictable from position. `i % 2 == 0` is balanced and readable
      off the index; an agent handed a slice of consecutive items scored 24/24.
 
 Run this before every paid run. A leak that survives to publication costs more
 than the run did.
 """
 
+import hashlib
 import json
 import os
 import sys
@@ -59,7 +63,14 @@ def main() -> int:
     check("every candidate key is in the bibliography shown", not unresolvable,
           f"{len(unresolvable)} offenders" if unresolvable else "")
 
-    # 3. labels neither positional nor derivable from the gold set
+    # 3. ids are content-derived, so they survive a change of filter or section
+    drifted = [c["claim_id"] for c in claims
+               if not c["claim_id"].endswith(
+                   hashlib.sha1(c["text_raw"].encode("utf-8")).hexdigest()[:8])]
+    check("claim ids are derived from content, not position", not drifted,
+          f"{len(drifted)} positional ids, e.g. {drifted[:3]}" if drifted else "")
+
+    # 4. labels neither positional nor derivable from the gold set
     seq = [p["label"] == "supported" for p in sorted(pairs, key=lambda x: x["pair_id"])]
     alt = sum(1 for a, b in zip(seq, seq[1:]) if a != b) / max(1, len(seq) - 1)
     lo, hi = ALTERNATION_BOUNDS

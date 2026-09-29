@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import hashlib
 from dataclasses import dataclass, asdict
 
 from . import latex
@@ -32,6 +33,7 @@ class Claim:
     line_no: int
     n_keys: int
     n_cite_sites: int     # how many \cite commands stood in the sentence
+    seq: int              # document order; ids are content-derived, not positional
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -77,9 +79,16 @@ def extract_claims(
             if single_cite_only and not (len(keys) == 1 and sites == 1):
                 continue
             seq += 1
+            # Identify a claim by its CONTENT, not by its position in the kept
+            # list. A positional counter renumbers whenever the filter changes,
+            # so `meas-0001` silently names a different sentence in every
+            # version of the benchmark - and any join across versions, or
+            # between a run log and a rebuilt corpus, compares different items
+            # while looking perfectly valid.
+            digest = hashlib.sha1(sent.encode("utf-8")).hexdigest()[:8]
             claims.append(
                 Claim(
-                    claim_id=f"{id_prefix}-{seq:04d}",
+                    claim_id=f"{id_prefix}-{digest}",
                     text=prose,
                     text_raw=sent,
                     gold_keys=keys,
@@ -89,6 +98,7 @@ def extract_claims(
                     line_no=para.line_no,
                     n_keys=len(keys),
                     n_cite_sites=sites,
+                    seq=seq,
                 )
             )
     return claims
