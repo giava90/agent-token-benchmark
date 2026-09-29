@@ -48,7 +48,8 @@ def main() -> int:
         if not os.path.exists(path):
             print(f"{m}: no verdicts.json yet — still running?")
             continue
-        got[m] = json.load(open(path, encoding="utf-8"))
+        # utf-8-sig: an agent may write the file with a BOM.
+        got[m] = json.load(open(path, encoding="utf-8-sig"))
 
     if not got:
         return 1
