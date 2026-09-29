@@ -16,13 +16,24 @@ def main() -> int:
     ap.add_argument("--section", default="Measurement")
     ap.add_argument("--prefix", default="meas")
     ap.add_argument("--out", default=DATA)
+    ap.add_argument("--allow-multi-cite", action="store_true",
+                    help="keep sentences citing several works; they are not "
+                         "cleanly gradable, so the default drops them")
     args = ap.parse_args()
 
     tex_path, bib = corpus.load_sources()
-    claims = corpus.extract_claims(tex_path, args.section, args.prefix)
+    claims = corpus.extract_claims(tex_path, args.section, args.prefix,
+                                   single_cite_only=not args.allow_multi_cite)
 
+    # The bibliography on display is every key the section cites, including the
+    # keys of sentences the single-citation filter dropped. The filter is about
+    # whether a claim can be graded, not about what the model may look up - and
+    # a bigger shown bibliography is both a better cache prefix and a richer
+    # pool to draw negatives from.
+    shown = corpus.extract_claims(tex_path, args.section, args.prefix,
+                                  single_cite_only=False)
     cited: set[str] = set()
-    for c in claims:
+    for c in shown:
         cited.update(c.gold_keys)
 
     missing = sorted(k for k in cited if k not in bib)
@@ -34,12 +45,14 @@ def main() -> int:
     corpus.write_jsonl(os.path.join(args.out, "refs_all.jsonl"), refs_all)
 
     with_abs = sum(1 for r in refs_section if r["abstract"])
-    multi = sum(1 for c in claims if c.n_keys > 1)
+    multi = sum(1 for c in claims if c.n_keys > 1 or c.n_cite_sites > 1)
 
     print(f"section              : {args.section}")
     print(f"claims               : {len(claims)}")
-    print(f"  single-key         : {len(claims) - multi}")
-    print(f"  multi-key          : {multi}")
+    print(f"  single-citation    : {len(claims) - multi}")
+    print(f"  multi-citation     : {multi}"
+          f"{'  (kept: --allow-multi-cite)' if multi else '  (dropped)'}")
+    print(f"claims shown as bib  : {len(shown)} sentences -> {len(cited)} keys")
     print(f"unique cited keys    : {len(cited)}")
     print(f"  resolved in bib    : {len(cited) - len(missing)}")
     print(f"  MISSING from bib   : {len(missing)} {missing[:5]}")

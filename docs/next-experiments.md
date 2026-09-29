@@ -26,6 +26,14 @@ construction is kept as `data/pairs_v1_alternating.jsonl` for provenance.
 
 ---
 
+> **Superseded in part, 2026-09-29.** See `scope-and-audit.md`, which restates
+> the learning objectives, fixes the methodology, and partitions every published
+> claim by whether it depends on the benchmark labels. R1 below is replaced by
+> §4.1 there: the corpus has since been restricted to single-citation sentences
+> (117 → 68 in this section, 402 across the review), so the re-run should be the
+> whole review at 402 items for **$14.97**, not this section at 68 for $1.96.
+> R2 and R3 stand as written.
+
 ## TODO — re-runs owed
 
 ### R1. Re-run the five-configuration experiment on the corrected pairs

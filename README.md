@@ -15,6 +15,7 @@ scripts/01_build_corpus.py     tex + bib  -> claims.jsonl, refs_*.jsonl
 scripts/02_fetch_abstracts.py  fill missing abstracts (OpenAlex/Crossref/arXiv)
 scripts/03_build_pairs.py      claims     -> pairs.jsonl (positives + negatives)
 scripts/04_smoke_mock.py       full harness against the mock client
+scripts/15_verify_benchmark.py assert the benchmark's integrity invariants
 ```
 
 Run them in order with the project interpreter (see `CLAUDE.md`):
@@ -29,11 +30,21 @@ Steps 1-4 make **no API calls and cost nothing**.
 
 | | |
 |---|---|
-| Claims | 117 (68 single-key, 49 multi-key) |
-| Unique cited keys | 93, all resolving in `references.bib` |
+| Claims | 68 — every one citing exactly one work |
+| Dropped as multi-citation | 49 of 117 |
+| Unique cited keys shown | 93, all resolving in `references.bib` |
 | Abstract coverage | 84/93 after fetching |
-| Verification pairs | 117 — 59 supported, 58 not (29 easy, 29 hard negatives) |
-| Cached prefix | ~120k chars, ~30k estimated tokens |
+| Verification pairs | 68 — 34 supported, 34 not (18 easy, 16 hard negatives) |
+| Cached prefix | ~120k chars, 37,276 tokens on Opus 5 |
+
+**Only single-citation sentences are graded.** A sentence citing several works
+has no single right answer to "does this reference support the claim?" — the
+reference may support one clause and be irrelevant to the rest. The bibliography
+on display is still all 93 keys the section cites, including those of the
+dropped sentences: the filter governs what can be graded, not what may be looked
+up, so the cached prefix is unchanged. Pass `--allow-multi-cite` to keep them.
+
+Whole review: 608 cited sentences, of which **402 are single-citation**.
 
 The 9 references still without an abstract are pre-digital classics
 (Erdős–Rényi 1959, Gilbert 1959, Chung 2002 and similar) with no

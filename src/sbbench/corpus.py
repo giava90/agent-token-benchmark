@@ -31,6 +31,7 @@ class Claim:
     subsubsection: str
     line_no: int
     n_keys: int
+    n_cite_sites: int     # how many \cite commands stood in the sentence
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -41,7 +42,17 @@ def extract_claims(
     section_substring: str = "Measurement",
     id_prefix: str = "meas",
     min_prose_words: int = 8,
+    single_cite_only: bool = True,
 ) -> list[Claim]:
+    """Sentences that carry a citation, with the citations masked out.
+
+    `single_cite_only` (the default) keeps only sentences with exactly one
+    citation command naming exactly one work. A sentence citing several works
+    has no single right answer to "does this reference support the claim?":
+    the reference may support one clause and be irrelevant to the rest, so a
+    verdict is neither clearly right nor clearly wrong and the accuracy is not
+    interpretable. Grading needs one claim, one supporting work.
+    """
     with open(tex_path, encoding="utf-8", errors="replace") as fh:
         lines = fh.read().split("\n")
 
@@ -60,6 +71,11 @@ def extract_claims(
             prose = latex.clean_prose(sent)
             if latex.prose_words(prose) < min_prose_words:
                 continue
+            # One \cite command naming one work. Both halves matter: a lone
+            # \citep{a,b} is one site but two works, and is just as ambiguous.
+            sites = prose.count(latex.CITATION_MASK)
+            if single_cite_only and not (len(keys) == 1 and sites == 1):
+                continue
             seq += 1
             claims.append(
                 Claim(
@@ -72,6 +88,7 @@ def extract_claims(
                     subsubsection=para.subsubsection,
                     line_no=para.line_no,
                     n_keys=len(keys),
+                    n_cite_sites=sites,
                 )
             )
     return claims

@@ -24,6 +24,15 @@ def main() -> int:
     refs = corpus.read_jsonl(os.path.join(DATA, "refs_section.jsonl"))
     all_keys = [r["key"] for r in refs]
 
+    bad = [c["claim_id"] for c in claims
+           if c.get("n_keys", 1) > 1 or c.get("n_cite_sites", 1) > 1]
+    if bad:
+        raise SystemExit(
+            f"{len(bad)} claims cite more than one work, e.g. {bad[:3]}. "
+            "A pair built on one is not cleanly gradable - rebuild claims.jsonl "
+            "with scripts/01_build_corpus.py (single-citation is the default)."
+        )
+
     pairs = negatives.build_pairs(claims, all_keys, seed=args.seed,
                                   hard_fraction=args.hard_fraction)
     corpus.write_jsonl(os.path.join(DATA, "pairs.jsonl"), [p.to_dict() for p in pairs])
