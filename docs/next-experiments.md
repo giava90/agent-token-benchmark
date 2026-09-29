@@ -24,9 +24,41 @@ not either. **The published cost and accuracy findings stand.** The agent result
 does not. Labels now come from a seeded shuffle (52% alternation); the original
 construction is kept as `data/pairs_v1_alternating.jsonl` for provenance.
 
-**Required before any further quality comparison:** re-run the benchmark on the
-corrected pairs. Cost and caching results do not depend on label ordering and
-need no re-run.
+---
+
+## TODO — re-runs owed
+
+### R1. Re-run the five-configuration experiment on the corrected pairs
+**Why:** 56 of 117 items changed label when the seeded shuffle replaced position
+parity, so the corrected benchmark is **not comparable item-by-item** to the
+published run. It needs repeating in full, not patching — a paired comparison
+against the old numbers is not available.
+**What is and is not affected:** cost, caching, token counts and the
+items-per-request findings do not depend on label ordering and stand as
+published. Every *accuracy* figure should be regarded as measured on a benchmark
+whose labels were positionally predictable, even though single-call runs could
+not exploit that.
+**Cost:** ~$8.70 at one claim per request, or **~$2.20 grouped at ten per
+request**, which the grouping experiment showed costs nothing in accuracy. Use
+the grouped form.
+
+### R2. Redo the agent test properly
+The phase-2 agent run was one subagent, one slice, no model specified, and the
+result was void. It also logged nothing but its verdicts. Before agents count as
+a measurement arm they need:
+- **a model chosen and recorded** per run (the Agent tool takes `model`)
+- **a run log** matching the API arm: model, tools used, turns, what it read
+- **the corrected pairs**, so pattern detection is not available
+- an explicit note that agent accuracy is **not comparable** to the API runs —
+  a subagent retrieves what it needs, the API arm got a fixed cached prefix and
+  one item, so they are different tasks
+Cost falls on the Claude Code plan rather than API credit, and cost figures must
+still be derived by counting prompts, since subagents do not expose `usage`.
+
+### R3. Log reply text from now on
+Both re-runs should persist the model's reply, not just the parsed verdict. Not
+doing so is why the over-reasoning mechanism could not be checked after the fact
+and needs its own paid re-run.
 
 ---
 
